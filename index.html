@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Developers Weather test</title>
+
+    <style>
+        .wrapper {
+            position: relative;
+        }
+
+        #video-overlay {
+            bottom: 70px;
+            left: 0;
+            position: absolute;
+            display: none;
+            z-index: 9999999;
+            padding-left: 10px;
+            color: #FFFFFF;
+            background-color: #304BB1;
+            border: 1px solid #ccc;
+            font-family: Arial;
+            transition: width 2s;
+            width: 528px;
+            height: 70px;
+        }
+
+
+        #firstOverlay {
+            background: #1876F9;
+            width: 50%;
+            height: 50%;
+        }
+
+        #btnClick {
+            background-color: #FBBE27;
+            position: absolute;
+            right: 30px;
+            bottom: 30px;
+            float: right;
+        }
+
+        #video-overlay.clicked {
+            width: 1268px;
+            height: 654px;
+        }
+
+        #title {
+            color: #000000;
+        }
+
+        #backButton {
+            background-color: transparent;
+            border: none;
+            color: #999999;
+        }
+
+        .ad {
+            width: 30%;
+            float: left;
+            border-right: 1px solid #999999;
+            margin-right: 30px;
+            font-size: 12px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .day {
+            float: left;
+            width: 50%;
+        }
+
+        .night {
+            float: right;
+            width: 50%;
+        }
+
+        #backButton {
+            background-color: transparent;
+            border: none;
+            color: #999999;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div id="video-overlay">
+            <p id="textAD">
+                Check Minneapolis Weather
+            </p>
+
+            <button id="backButton">
+                < Back </button>
+                    <h3 id="title"></h3>
+
+                    <div id="container_ads">
+                        <div class="ad">
+                            <p id="date_0"></p>
+                            <div class="day">
+                                <p id="day_0"></p>
+                                <span id="info_day_0"></span>
+                                <span id="icon_day_0"></span>
+                            </div>
+                            <div class="night">
+                                <p id="night_0"></p>
+                                <span id="info_night_0"></span>
+                                <span id="icon_night_0"></span>
+                            </div>
+                            <p id="sunrise_0"></p>
+                            <p id="sunset_0"></p>
+                        </div>
+                        <div class="ad">
+                            <p id="date_1"></p>
+                            <div class="day">
+                                <p id="day_1"></p>
+                                <span id="info_day_1"></span>
+                                <span id="icon_day_1"></span>
+                            </div>
+                            <div class="night">
+                                <p id="night_1"></p>
+                                <span id="info_night_1"></span>
+                                <span id="icon_night_1"></span>
+                            </div>
+                            <p id="sunrise_1"></p>
+                            <p id="sunset_1"></p>
+                        </div>
+
+                        <div class="ad">
+                            <p id="date_2"></p>
+                            <div class="day">
+                                <p id="day_2"></p>
+                                <span id="info_day_2"></span>
+                                <span id="icon_day_2"></span>
+                            </div>
+                            <div class="night">
+                                <p id="night_2"></p>
+                                <span id="info_night_2"></span>
+                                <span id="icon_night_2"></span>
+                            </div>
+                            <p id="sunrise_2"></p>
+                            <p id="sunset_2"></p>
+                        </div>
+                    </div>
+
+                    <button id="btnClick">Click to expand</button>
+        </div>
+
+        <video id="video" controls autoplay>
+            <source id="mp4" src="http://static.innovid.com/media/encoded/07_16/22717/11_source_17827_55212.mp4"
+                type="video/mp4">
+        </video>
+    </div>
+    <script>
+        var overlay = document.getElementById('video-overlay'),
+            video = document.getElementById('video'),
+            videoPlaying = false,
+            btnClick = document.getElementById("btnClick"),
+            backButton = document.getElementById("backButton"),
+            textAD = document.getElementById("textAD"),
+            containerADS = document.getElementById("container_ads");
+
+        backButton.style.display = "none";
+
+        function hideOverlay() {
+            overlay.style.display = "none";
+            videoPlaying = true;
+            video.play();
+
+            /*Resets to the first ad*/
+            overlay.classList.remove("clicked");
+            overlay.style.backgroundColor = "#304BB1";
+            overlay.style.color = "#FFFFFF";
+            textAD.style.display = "block";
+            btnClick.style.display = "block";
+            /*Delete new elements*/
+            backButton.style.display = "none";
+            title.style.display = "none";
+            containerADS.style.display = "none";
+
+        }
+        function expandOverlay() {
+            overlay.classList.toggle("clicked");
+            overlay.style.backgroundColor = "#FFFFFF";
+            overlay.style.color = "#000000";
+            textAD.style.display = "none";
+
+            /*Reset button and the other elements for new expands*/
+            backButton.style.display = "block";
+            title.style.display = "block";
+            containerADS.style.display = "block";
+
+            video.pause();
+            /*Hide button*/
+            if (btnClick.style.display === "none") {
+                btnClick.style.display = "block";
+            } else {
+                btnClick.style.display = "none";
+            }
+
+
+            /*Agregar info del json*/
+            document.getElementById("title").innerHTML = "Three Days Forecast for Minneapolis";/*JSON*/
+            let url = 'https://service.innovid.com/s/dataproxy/proxy-cb-nh.php?c=3600&url=http%3A%2F%2Fapi.worldweatheronline.com%2Fpremium%2Fv1%2Fweather.ashx%3Fkey%3D8mkjmgnh2fhk6h4hdak5syay%26q%3Dminneapolis%26format%3Djson%26num_of_days%3D3';
+
+            fetch(url)
+                .then(res => res.json())
+                .then((out) => {
+                    //PRINT DATE
+                    for (i = 0; i < 3; i++) {
+                        document.getElementById("date_" + i).innerHTML = "Date: " + out.data.weather[i].date;
+                        document.getElementById("day_" + i).innerHTML = "Day: " + out.data.weather[i].hourly[4].tempC + "&deg;";
+                        document.getElementById("info_day_" + i).innerHTML = out.data.weather[i].hourly[4].weatherDesc[0].value + "<br>";
+                        document.getElementById("icon_day_" + i).innerHTML = "<img src='" + out.data.weather[i].hourly[4].weatherIconUrl[0].value + "'>";
+                        document.getElementById("night_" + i).innerHTML = "Night: " + out.data.weather[i].hourly[7].tempC + "&deg;";
+                        document.getElementById("info_night_" + i).innerHTML = out.data.weather[i].hourly[7].weatherDesc[0].value + "<br>";
+                        document.getElementById("icon_night_" + i).innerHTML = "<img src='" + out.data.weather[i].hourly[7].weatherIconUrl[0].value + "'>";
+                        document.getElementById("sunrise_" + i).innerHTML = "Sunrise: " + out.data.weather[i].astronomy[0].sunrise;
+                        document.getElementById("sunset_" + i).innerHTML = "Sunset: " + out.data.weather[i].astronomy[0].sunset;
+                    }
+                })
+                .catch(err => { throw err });
+
+
+
+
+        }
+
+        function showOverlay() {
+            // this check is to differentiate seek and actual pause 
+            if (video.readyState === 4) {
+                overlay.style.display = "block";
+                overlay.classList.remove("clicked");
+                videoPlaying = true;
+
+                /*Resets to the first ad*/
+                overlay.style.backgroundColor = "#304BB1";
+                overlay.style.color = "#FFFFFF";
+                textAD.style.display = "block";
+                btnClick.style.display = "block";
+                /*Delete new elements*/
+                backButton.style.display = "none";
+                title.style.display = "none";
+                containerADS.style.display = "none";
+
+
+            }
+        }
+
+        /*Listeners*/
+
+        btnClick.addEventListener('click', expandOverlay);
+        backButton.addEventListener('click', hideOverlay);
+        video.addEventListener('play', showOverlay);
+    </script>
+
+
+</body>
+
+</html>
