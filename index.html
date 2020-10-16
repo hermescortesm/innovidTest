@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HTML Developers Weather test</title>
-
     <style>
         .wrapper {
             position: relative;
         }
-
         #video-overlay {
             bottom: 70px;
             left: 0;
@@ -26,14 +23,11 @@
             width: 528px;
             height: 70px;
         }
-
-
         #firstOverlay {
             background: #1876F9;
             width: 50%;
             height: 50%;
         }
-
         #btnClick {
             background-color: #FBBE27;
             position: absolute;
@@ -41,22 +35,18 @@
             bottom: 30px;
             float: right;
         }
-
         #video-overlay.clicked {
             width: 1268px;
             height: 654px;
         }
-
         #title {
             color: #000000;
         }
-
         #backButton {
             background-color: transparent;
             border: none;
             color: #999999;
         }
-
         .ad {
             width: 30%;
             float: left;
@@ -65,17 +55,14 @@
             font-size: 12px;
             font-family: Arial, Helvetica, sans-serif;
         }
-
         .day {
             float: left;
             width: 50%;
         }
-
         .night {
             float: right;
             width: 50%;
         }
-
         #backButton {
             background-color: transparent;
             border: none;
@@ -83,18 +70,15 @@
         }
     </style>
 </head>
-
 <body>
     <div class="wrapper">
         <div id="video-overlay">
             <p id="textAD">
                 Check Minneapolis Weather
             </p>
-
             <button id="backButton">
                 < Back </button>
                     <h3 id="title"></h3>
-
                     <div id="container_ads">
                         <div class="ad">
                             <p id="date_0"></p>
@@ -126,7 +110,6 @@
                             <p id="sunrise_1"></p>
                             <p id="sunset_1"></p>
                         </div>
-
                         <div class="ad">
                             <p id="date_2"></p>
                             <div class="day">
@@ -143,10 +126,8 @@
                             <p id="sunset_2"></p>
                         </div>
                     </div>
-
                     <button id="btnClick">Click to expand</button>
         </div>
-
         <video id="video" controls autoplay>
             <source id="mp4" src="http://static.innovid.com/media/encoded/07_16/22717/11_source_17827_55212.mp4"
                 type="video/mp4">
@@ -160,14 +141,11 @@
             backButton = document.getElementById("backButton"),
             textAD = document.getElementById("textAD"),
             containerADS = document.getElementById("container_ads");
-
         backButton.style.display = "none";
-
         function hideOverlay() {
             overlay.style.display = "none";
             videoPlaying = true;
             video.play();
-
             /*Resets to the first ad*/
             overlay.classList.remove("clicked");
             overlay.style.backgroundColor = "#304BB1";
@@ -178,19 +156,16 @@
             backButton.style.display = "none";
             title.style.display = "none";
             containerADS.style.display = "none";
-
         }
         function expandOverlay() {
             overlay.classList.toggle("clicked");
             overlay.style.backgroundColor = "#FFFFFF";
             overlay.style.color = "#000000";
             textAD.style.display = "none";
-
             /*Reset button and the other elements for new expands*/
             backButton.style.display = "block";
             title.style.display = "block";
             containerADS.style.display = "block";
-
             video.pause();
             /*Hide button*/
             if (btnClick.style.display === "none") {
@@ -198,12 +173,9 @@
             } else {
                 btnClick.style.display = "none";
             }
-
-
             /*Agregar info del json*/
             document.getElementById("title").innerHTML = "Three Days Forecast for Minneapolis";/*JSON*/
             let url = 'https://service.innovid.com/s/dataproxy/proxy-cb-nh.php?c=3600&url=http%3A%2F%2Fapi.worldweatheronline.com%2Fpremium%2Fv1%2Fweather.ashx%3Fkey%3D8mkjmgnh2fhk6h4hdak5syay%26q%3Dminneapolis%26format%3Djson%26num_of_days%3D3';
-
             fetch(url)
                 .then(res => res.json())
                 .then((out) => {
@@ -221,19 +193,13 @@
                     }
                 })
                 .catch(err => { throw err });
-
-
-
-
         }
-
         function showOverlay() {
             // this check is to differentiate seek and actual pause 
             if (video.readyState === 4) {
                 overlay.style.display = "block";
                 overlay.classList.remove("clicked");
                 videoPlaying = true;
-
                 /*Resets to the first ad*/
                 overlay.style.backgroundColor = "#304BB1";
                 overlay.style.color = "#FFFFFF";
@@ -243,19 +209,12 @@
                 backButton.style.display = "none";
                 title.style.display = "none";
                 containerADS.style.display = "none";
-
-
             }
         }
-
         /*Listeners*/
-
         btnClick.addEventListener('click', expandOverlay);
         backButton.addEventListener('click', hideOverlay);
         video.addEventListener('play', showOverlay);
     </script>
-
-
 </body>
-
 </html>
